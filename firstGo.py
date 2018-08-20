@@ -1,3 +1,5 @@
+import shelve
+
 class User():
 	def __init__(self, name):
 		self.name = name
@@ -29,41 +31,54 @@ class Language():
 
 def display_stats(matt):
 	print("\n{}, here is your xp:\n".format(matt.name))
-	for i in range(len(matt.languages)):
-		print(matt.languages[i].name)
-		print("Reading: {}".format(matt.languages[i].read))
-		print("Writing: {}".format(matt.languages[i].write))
-		print("Listening: {}".format(matt.languages[i].listen))
-		print("Speaking: {}".format(matt.languages[i].speak))
+	for ii in range(len(matt.languages)):
+		print(matt.languages[ii].name)
+		print("Reading: {}".format(matt.languages[ii].read))
+		print("Writing: {}".format(matt.languages[ii].write))
+		print("Listening: {}".format(matt.languages[ii].listen))
+		print("Speaking: {}".format(matt.languages[ii].speak))
 		print("")
 
 def main():
 	matt = User("Matt")
 	matt.add_language(Language("Portuguese"))
-	for i in range(len(matt.languages)):
-		if matt.languages[i].name == "Portuguese":
-			#matt.languages[i].legacy(25,50,100,200)
-			#matt.languages[i].duolingo(50)
+	for ii in range(len(matt.languages)):
+		if matt.languages[ii].name == "Portuguese":
+			matt.languages[ii].legacy(25,50,100,200)
+			matt.languages[ii].duolingo(50)
 			break
 	matt.add_language(Language("Spanish"))
-	for i in range(len(matt.languages)):
-		if matt.languages[i].name == "Spanish":
-			#matt.languages[1].legacy(10,20,30,40)
-			#matt.languages[i].podcast(12)
+	for ii in range(len(matt.languages)):
+		if matt.languages[ii].name == "Spanish":
+			matt.languages[ii].legacy(10,20,30,40)
+			matt.languages[ii].podcast(12)
 			break
 	matt.add_language(Language("Esperanto"))
-	for i in range(len(matt.languages)):
-		if matt.languages[i].name == "Esperanto":
-			#matt.languages[1].legacy(10,20,30,40)
-			matt.languages[i].duolingo(90)
+	for ii in range(len(matt.languages)):
+		if matt.languages[ii].name == "Esperanto":
+			matt.languages[ii].legacy(10,20,30,40)
+			matt.languages[ii].duolingo(90)
 			break
 	matt.add_language(Language("Italian"))
-	for i in range(len(matt.languages)):
-		if matt.languages[i].name == "Italian":
-			#matt.languages[1].legacy(10,20,30,40)
-			#matt.languages[i].podcast(12)
+	for ii in range(len(matt.languages)):
+		if matt.languages[ii].name == "Italian":
+			matt.languages[ii].legacy(10,20,30,40)
+			matt.languages[ii].podcast(12)
 			break
 	display_stats(matt)
 
 if __name__=="__main__":
 	main()
+	
+'''
+def open_wb(filename):
+	wb = openpyxl.load_workbook(filename)
+	return wb
+
+	
+	wb = open_wb("Yossarian.xlsx")
+	history_sheet = wb.get_sheet_by_name("History")
+	for r in range(2, history_sheet.max_row+1):
+		if history_sheet.cell(row=r, column=2).value == "Duolingo_Esperanto":
+			matt.languages[2].duolingo(history_sheet.cell(row=r, column=3).value)
+'''
