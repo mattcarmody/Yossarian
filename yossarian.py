@@ -43,10 +43,8 @@ def main():
 			eval(raw_data[ii][1]).speak += weights[5] * quantity /10
 		
 	for lang in languageNames:
-		print(eval(lang).read)
-		print(eval(lang).write)
-		print(eval(lang).listen)
-		print(eval(lang).speak)
+		for skill in languageSkills:
+			print("{} {}: {}".format(lang, skill, getattr(eval(lang), "{}".format(skill))))
 
 if __name__=="__main__":
 	main()
