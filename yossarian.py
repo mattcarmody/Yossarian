@@ -21,6 +21,10 @@ Portuguese = Language(languageNames[0])
 Spanish = Language(languageNames[1])
 Esperanto = Language(languageNames[2])
 Italian = Language(languageNames[3])
+levels = [0,83,174,276,388,512,650,801,969,1154,1358,1584,1833,2107,\
+2411,2746,3115,3523,3973,4470,5018,5624,6291,7028,7842,8740,9730,10824,\
+12031,13363,14833,16456,18247,20224,22406,24815,27473,30408,33648,37224,\
+41171,45529,50339,55649]
 
 def list_options(cur):
 	print("Available Languages:")
@@ -48,7 +52,13 @@ def view_progress(cur):
 	
 	for lang in languageNames:
 		for skill in languageSkills:
-			print("{} {}: {}".format(lang, skill, getattr(eval(lang), "{}".format(skill))))
+			xp = getattr(eval(lang), "{}".format(skill))
+			ii = 0
+			level = 0
+			while xp > levels[ii]:
+				level += 1
+				ii += 1
+			print("{} {}: {}. Level {}".format(lang, skill, xp, level))
 			
 def add_training(cur, language, action, quantity):
 	now = str(datetime.datetime.now().timestamp())	
