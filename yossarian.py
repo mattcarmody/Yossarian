@@ -1,9 +1,13 @@
 #yossarian.py
 
 import datetime
+import json
 import logging
+import requests
 import sqlite3
 import sys
+
+import personal
 
 logging.basicConfig(filename='yossarian_log.txt', level=logging.DEBUG, format=' %(asctime)s - %(levelname)s - %(message)s')
 
@@ -58,7 +62,7 @@ def view_progress(cur):
 			while xp > levels[ii]:
 				level += 1
 				ii += 1
-			print("{} {}: {}. Level {}".format(lang, skill, xp, level))
+			print("{} {}: {}    Level {}".format(lang, skill, int(xp), level))
 			
 def add_training(cur, language, action, quantity):
 	now = str(datetime.datetime.now().timestamp())	
@@ -69,6 +73,18 @@ def help_menu():
 	print("status  // View statistics")
 	print("list    // See the supported languages and activities")
 	print("add     // Add training to history. Must be followed by Language Action Quantity")
+	
+def add_duolingo(cur):    
+	duo_url = "https://www.duolingo.com/users/{}".format(personal.data["duoUsername"])
+	duo_response = requests.get(duo_url)
+	duo_response.raise_for_status()
+	duo_data = json.loads(duo_response.text)
+	
+	cur.execute("UPDATE History SET Quantity=? WHERE Language='Esperanto' AND Action='Duolingo' LIMIT 1", (duo_data["languages"][1]["points"] / 10, ))
+	cur.execute("UPDATE History SET Quantity=? WHERE Language='Italian' AND Action='Duolingo' LIMIT 1", (duo_data["languages"][3]["points"] / 10, ))
+	cur.execute("UPDATE History SET Quantity=? WHERE Language='Spanish' AND Action='Duolingo' LIMIT 1", (duo_data["languages"][8]["points"] / 10, ))
+	cur.execute("UPDATE History SET Quantity=? WHERE Language='Portuguese' AND Action='Duolingo' LIMIT 1", (duo_data["languages"][11]["points"] / 10, ))
+
 
 def main():
 	logging.debug("Start main.")
@@ -79,7 +95,10 @@ def main():
 			if sys.argv[1]=="list":
 				list_options(cur)
 			elif sys.argv[1]=="status":
+				add_duolingo(cur)
 				view_progress(cur)
+			elif sys.argv[1]=="duolingo":
+				add_duolingo(cur)
 			elif sys.argv[1]=="add":
 				if len(sys.argv)==5:
 					add_training(cur, sys.argv[2], sys.argv[3], sys.argv[4])
