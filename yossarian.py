@@ -49,6 +49,16 @@ def view_progress(cur):
 	for lang in languageNames:
 		for skill in languageSkills:
 			print("{} {}: {}".format(lang, skill, getattr(eval(lang), "{}".format(skill))))
+			
+def add_training(cur, language, action, quantity):
+	now = str(datetime.datetime.now().timestamp())	
+	cur.execute("INSERT INTO History (Language, Action, Quantity, Datetime) VALUES (?, ?, ?, ?);", (language, action, quantity, now))
+
+def help_menu():
+	print("The following run commands are supported:")
+	print("status  // View statistics")
+	print("list    // See the supported languages and activities")
+	print("add     // Add training to history. Must be followed by Language Action Quantity")
 
 def main():
 	logging.debug("Start main.")
@@ -58,10 +68,17 @@ def main():
 		if len(sys.argv) >= 2:
 			if sys.argv[1]=="list":
 				list_options(cur)
+			elif sys.argv[1]=="status":
+				view_progress(cur)
+			elif sys.argv[1]=="add":
+				if len(sys.argv)==5:
+					add_training(cur, sys.argv[2], sys.argv[3], sys.argv[4])
+				else:
+					print("When adding there need to be three additional arguments: Language, Action and Quantity.")
+			else:
+				help_menu()
 		else:
-			view_progress(cur)
+			help_menu()
 
 if __name__=="__main__":
 	main()
-	
-#now = str(datetime.datetime.now().timestamp())	
